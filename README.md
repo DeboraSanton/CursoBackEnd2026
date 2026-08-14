@@ -266,9 +266,27 @@ if($valorCompra > 200){
 } else {
   $valorFinal = $valorCompra*0.95;
 }
+
 ```
 
 *OBS*: Sempre Usar `elseif` para situações que precisam de mais de uma condição, ou seja, fazer encadeamento das condições.
+
+*OBS* Uso **errado** do `if` que é não fazer o encadeamento de condicionais
+
+Exemplo:
+
+```php
+if($valorCompra > 200) {
+    $valorFinal = $valorCompra*0.85;
+}
+if($valorCompra > 100) {
+    $valorFinal = $valorCompra*0.90;
+}
+if($valorCompra < 100) {
+  $valorFinal = $valorCompra*0.95;
+}
+
+```
 
 ##### Operadores Ternários
 
@@ -285,7 +303,7 @@ $idade = 20;
 //O formato é : (condição) ? verdadeiro : falso;
 
 $status = ($idade >= 18) ? "Maior de idade" : "Menor de idade";
-
+$status2 = ($idade<18) ? "Criança" : ($idade<60) ? "adulto" : "idoso";
 ```
 
 ##### Expressão Condicional `match` (php 8)
@@ -294,7 +312,7 @@ No mercado de PHP atual, não se usa mais uma dezena de `if/elseif` para checar 
 
 ```mermaid
 
-graph LR
+graph TD
     A[Valor] --> B{Condicional}
     B --> C[Ação 1]
     B --> D[Ação 2]
@@ -304,3 +322,91 @@ graph LR
     B --> H[Ação default]
 
 ```
+
+
+```php
+
+$diaSemana = date("Week"); // Pega o dia da semana em formato numérico
+
+//Tranforma dia da semana em formato texto (Domingo, Segunda,...)
+
+$nomeDiaSemana = match($diaSemana){
+  "0" => "Domingo",
+  "1" => "Segunda",
+  "2" => "Terça",
+  "3" => "Quarta",
+  "4" => "Quinta",
+  "5" => "Sexta",
+  "6" => "Sabado",
+  "default" => "Dia Invalido"
+};
+
+```
+
+##### Laços de Repetição
+
+Um laço de repetição faz com que, um bloco de códigos rode várias vezes, até que uma condição mande parar.
+
+- O Laço `while` (enquanto)
+
+Ele verifica se a condição é vrdadeira ANTES de entrar no laço. Ideal quando voce não sabe quantas vezes vai rodar o laço.
+
+```mermaid
+
+flowchart LR
+
+A[Inicio] --> B{Condição}
+B --true--> C[Executa o Laço]
+C --> B
+B --false--> D[Interrompe o Laço]
+
+```
+
+Exemplo: Jogo de adivinhação de um número Secreto
+
+```php
+
+$numeroSecreto = 7;
+
+$tentativas = 0;
+
+while($tentativa != $numeroSecreto){
+   echo "Tente Novamente"
+  //vou pegar um número aleatório entre 1 e 10
+  $tentativa = rand(1,10);
+}
+
+echo "Acertou !!! o número secreto é $numeroSecreto";
+
+```
+
+- O Laço `do-while` (Faça-enquanto)
+A diferença é que ele executa o bloco pelo menos uma vez, mesmo que a condição seja falsa desde o inicio, pois ele só pergunta no final
+
+```mermaid
+
+flowchart LR
+
+A([Inicio]) --> B[Executa Ação]
+B --> C{Condição}
+C --true--> B
+C --false--> D([Fim])
+
+```
+Exemplo: Jogo de adivinhação
+
+```php
+
+$numeroSecreto = rand(1,10);
+
+do {
+    $tentativa = rand(1,10); Simular um palpite aleatório
+    
+    if($tentativa == $numeroSecreto){
+      echo "parabéns, Acertou!!!!!"
+    }
+} while ($tentativa != $numeroSecreto);
+
+```
+
+OBS: Uso ideal do `do-while`, menus de sistema ou sistemas de solicitações de dados, sistemas interativos;
