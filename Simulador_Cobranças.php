@@ -46,7 +46,7 @@ echo "<hr>";
 
 ?>
 
-
+//Criação da tabela
 <hr>
 <h2>Projeção da divida</h2>
 
