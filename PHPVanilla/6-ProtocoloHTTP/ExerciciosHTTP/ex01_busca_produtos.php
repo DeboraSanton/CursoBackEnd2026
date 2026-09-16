@@ -1,128 +1,83 @@
 <?php
 
-// Aqui eu criei a função que calcula o IMC
-function calcularIMC(float $peso, float $altura): float
-{
-    return $peso / ($altura * $altura);
-}
+// Lista dos produtos
+$produtos = [
+    ['nome' => 'Notebook', 'categoria' => 'Eletrônicos', 'preco' => 3500],
+    ['nome' => 'Mouse', 'categoria' => 'Eletrônicos', 'preco' => 80],
+    ['nome' => 'Teclado', 'categoria' => 'Eletrônicos', 'preco' => 150],
+    ['nome' => 'Caderno', 'categoria' => 'Papelaria', 'preco' => 30],
+    ['nome' => 'Mochila', 'categoria' => 'Acessórios', 'preco' => 200],
+    ['nome' => 'Fone', 'categoria' => 'Eletrônicos', 'preco' => 120]
+];
 
-// Aqui eu criei a função que classifica o resultado
-function classificarIMC(float $imc): string
-{
-    if ($imc < 25) {
-        return "Normal";
-    } elseif ($imc < 30) {
-        return "Sobrepeso";
-    } else {
-        return "Obesidade";
+// Aqui o projeto pega os valores que foram digitados
+$nome = $_GET['nome'] ?? '';
+$preco = $_GET['preco_maximo'] ?? '';
+
+// Aqui vai acontecer a filtragem dos produtos
+$resultado = array_filter($produtos, function ($produto) use ($nome, $preco) {
+
+    // Verifica se o nome digitado existe no produto
+    if ($nome != '' && stripos($produto['nome'], $nome) === false) {
+        return false;
     }
-}
 
-// Aqui o projeto pega os valores do formulário
-$nome = $_POST['nome'] ?? '';
-$peso = $_POST['peso'] ?? '';
-$altura = $_POST['altura'] ?? '';
-
-$erro = '';
-
-// Aqui ele verifica se o formulário foi enviado
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    // Aqui verifica se o peso está válido
-    if (!is_numeric($peso) || $peso < 20 || $peso > 300) {
-        $erro = "Digite um peso válido.";
-
-    // Aqui verifica se a altura está válida
-    } elseif (!is_numeric($altura) || $altura < 0.5 || $altura > 2.5) {
-        $erro = "Digite uma altura válida.";
-
-    // Se estiver tudo certo, calcula o IMC
-    } else {
-        $imc = calcularIMC($peso, $altura);
-        $classificacao = classificarIMC($imc);
+    // Verifica se o preço passou do valor máximo
+    if ($preco != '' && $produto['preco'] > $preco) {
+        return false;
     }
-}
+
+    return true;
+});
 ?>
 
-<h1>Calculadora de IMC</h1>
+<h1>Buscar Produtos</h1>
 
-<form method="POST">
+<!-- Formulário para fazer a busca -->
+<form method="GET">
 
-    <!-- Campo para colocar o nome -->
-    Nome:
-    <input type="text" name="nome">
+    <input type="text" name="nome" placeholder="Nome do produto">
 
-    <br><br>
+    <input type="number" name="preco_maximo" placeholder="Preço máximo">
 
-    <!-- Campo para colocar o peso -->
-    Peso:
-    <input type="number" name="peso" step="0.1">
-
-    <br><br>
-
-    <!-- Campo para colocar a altura -->
-    Altura:
-    <input type="number" name="altura" step="0.01">
-
-    <br><br>
-
-    <button>Calcular</button>
+    <button>Buscar</button>
 
 </form>
 
-<?php if ($erro != ''): ?>
+<h2>Produtos</h2>
 
-    <!-- Mostra o erro caso tenha algum problema -->
-    <p><?= $erro ?></p>
+<!-- Aqui mostra os produtos encontrados -->
+<?php foreach ($resultado as $produto): ?>
 
-<?php endif; ?>
+    <p>
+        <?= $produto['nome'] ?> -
+        <?= $produto['categoria'] ?> -
+        R$ <?= number_format($produto['preco'], 2, ',', '.') ?>
+    </p>
 
-<?php if (isset($imc)): ?>
-
-    <!-- Aqui mostra o resultado do cálculo -->
-    <div class="resultado">
-
-        <h2>Resultado</h2>
-
-        <p>Nome: <?= $nome ?></p>
-        <p>IMC: <?= number_format($imc, 2, ',', '.') ?></p>
-        <p>Classificação: <?= $classificacao ?></p>
-
-    </div>
-
-<?php endif; ?>
+<?php endforeach; ?>
 
 <style>
 
 body {
-    background-color: #f5efc6;
-    font-family: sans-serif;
+    background-color: #EAF4FF;
+    font-family: Arial;
     padding: 30px;
 }
 
-h1 {
-    color: #D88BA8;
-}
-
-form, .resultado {
-    background-color: #facbe0;
-    padding: 20px;
+form, p {
+    background-color: white;
+    padding: 15px;
     width: 400px;
-    border-radius: 10px;
-}
-
-input {
-    padding: 6px;
-    border: 1px solid #D88BA8;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
 button {
-    background-color: #EFA9C4;
+    background-color: #5A90F5;
+    color: white;
     border: none;
     padding: 8px 15px;
     border-radius: 5px;
-    font-weight: bold;
 }
 
 </style>
