@@ -1,0 +1,17 @@
+[
+    {
+        "nome": "Debora",
+        "mensagem": "olá mundo",
+        "data": "18\/09\/2026 19:25"
+    },
+    {
+        "nome": "<script>alert('XSS Executado!')<\/script>",
+        "mensagem": "bom diaaa",
+        "data": "18\/09\/2026 19:25"
+    },
+    {
+        "nome": "Debora",
+        "mensagem": "bom diia",
+        "data": "18\/09\/2026 19:33"
+    }
+]
