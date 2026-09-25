@@ -1,0 +1,2 @@
+[2026-09-25 19:43:14] ERRO: Erro no banco de dados: could not find driver
+[2026-09-25 19:44:03] ERRO: Erro no banco de dados: SQLSTATE[08006] [7] connection to server at "127.0.0.1", port 5432 failed: FATAL:  autenticação do tipo senha falhou para o usuário "Postgres"
